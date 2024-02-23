@@ -1,0 +1,36 @@
+if choice == 11:
+        filename = input("Enter filename for batch enrollment: ")
+        with open(filename, "r") as file:
+            for line in file:
+                first_name, last_name, email, date_of_birth, faculty_name = line.strip().split(",")
+                date_of_birth = datetime.datetime.strptime(date_of_birth, "%Y-%m-%d")
+                student = Student(first_name, last_name, email, datetime.datetime.now(), date_of_birth)
+                for faculty in university.faculties:
+                    if faculty.name == faculty_name:
+                        faculty.add_student(student)
+                        logger.log(f"Enrolled student {email} to {faculty_name}")
+                        print(f"Enrolled student {email} to {faculty_name}")
+                        break
+                else:
+                    print(f"Cannot enroll student {email}: Faculty {faculty_name} not found")
+                    logger.log(f"Failed to enroll student {email}: Faculty {faculty_name} not found")
+    elif choice == 12:
+        filename = input("Enter filename for batch graduation: ")
+        with open(filename, "r") as file:
+            for line in file:
+                email, faculty_name = line.strip().split(",")
+                for faculty in university.faculties:
+                    if faculty.name == faculty_name:
+                        for student in faculty.students:
+                            if student.email == email:
+                                faculty.graduate_student(student)
+                                logger.log(f"Graduated student {email} from {faculty_name}")
+                                print(f"Graduated student {email} from {faculty_name}")
+                                break
+                        else:
+                            print(f"Cannot graduate student {email}: Student not found in {faculty_name}")
+                            logger.log(f"Failed to graduate student {email}: Student not found in {faculty_name}")
+                    break
+                else:
+                    print(f"Cannot graduate student {email}: Faculty {faculty_name} not found")
+                    logger.log(f"Failed to graduate student {email}: Faculty {faculty_name} not found")
